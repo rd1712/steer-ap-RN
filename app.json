@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "steer-app",
+    "slug": "steer-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "steer-app"
+}

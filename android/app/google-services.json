@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "673266632947",
+    "project_id": "steer-app-28ba4",
+    "storage_bucket": "steer-app-28ba4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673266632947:android:2990b3d5d9f3bed3e74f86",
+        "android_client_info": {
+          "package_name": "com.steerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "673266632947-h3dt01vpgc4abd8l9o0n56b023ubk9hp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.steerapp",
+            "certificate_hash": "cc26a6b05e92ec37c438cedd643e8fce4267ade3"
+          }
+        },
+        {
+          "client_id": "673266632947-r28k5qvk70l5rjstukfuj2mkoeh7i9l6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmoMtxivDXUA1VYATle7EKHg2cARKalCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "673266632947-r28k5qvk70l5rjstukfuj2mkoeh7i9l6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
