@@ -1,6 +1,6 @@
 import auth from "@react-native-firebase/auth";
 import * as types from "../types";
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export const restoreSession = (props) => (dispatch) => {
   const user = auth().currentUser;
@@ -14,17 +14,17 @@ export const restoreSession = (props) => (dispatch) => {
 export const loginUsingGoogle = () => async (dispatch) => {
   dispatch(sessionLoading());
 
-  // GoogleSignin.configure({
-  //   webClientId: "673266632947-r28k5qvk70l5rjstukfuj2mkoeh7i9l6.apps.googleusercontent.com",
-  //   offlineAccess: false,
-  // });
+  GoogleSignin.configure({
+    webClientId: "673266632947-r28k5qvk70l5rjstukfuj2mkoeh7i9l6.apps.googleusercontent.com",
+    offlineAccess: false,
+  });
 
   try {
-    // const { idToken } = await GoogleSignin.signIn();
-    // const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    // console.log(googleCredential);
-    // const { user, additionalUserInfo } = await auth().signInWithCredential(googleCredential);
-    // console.log(user);
+    const { idToken } = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    console.log(googleCredential);
+    const { user, additionalUserInfo } = await auth().signInWithCredential(googleCredential);
+    console.log(user);
 
     // if (additionalUserInfo.isNewUser) {
     // const userRef = db.collection("users");
