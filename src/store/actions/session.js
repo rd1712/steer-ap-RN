@@ -1,42 +1,70 @@
 import auth from "@react-native-firebase/auth";
 import * as types from "../types";
+import { phone } from "phone";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+
+const configureGoogleSignIn = () => {
+  GoogleSignin.configure({
+    webClientId: "673266632947-r28k5qvk70l5rjstukfuj2mkoeh7i9l6.apps.googleusercontent.com",
+    offlineAccess: false,
+  });
+};
 
 export const restoreSession = (props) => (dispatch) => {
   const user = auth().currentUser;
   console.log(user);
   if (user) {
     dispatch(sessionRestoring(user));
-    // props.navigation.navigate("App");
+    props.navigation.navigate("Onboarding");
   }
 };
 
 export const loginUsingGoogle = () => async (dispatch) => {
   dispatch(sessionLoading());
-
-  GoogleSignin.configure({
-    webClientId: "673266632947-r28k5qvk70l5rjstukfuj2mkoeh7i9l6.apps.googleusercontent.com",
-    offlineAccess: false,
-  });
+  configureGoogleSignIn();
 
   try {
     const { idToken } = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    console.log(googleCredential);
     const { user, additionalUserInfo } = await auth().signInWithCredential(googleCredential);
+
     console.log(user);
 
-    // if (additionalUserInfo.isNewUser) {
-    // const userRef = db.collection("users");
-    // await userRef.doc(user.uid).set({
-    //   uid: user.uid,
-    //   displayName: user.displayName,
-    //   photoURL: user.photoURL,
-    //   email: user.email,
-    // });
+    if (additionalUserInfo.isNewUser) {
+      console.log("New User");
+    }
+
+    dispatch(sessionSuccess(user, "google"));
+  } catch (error) {
+    dispatch(sessionError(error.message));
+  }
+};
+
+export const verifyOTP = (confirmation, code) => async (dispatch) => {
+  dispatch(sessionLoading());
+
+  try {
+    await confirmation.confirm(code);
+    dispatch(sessionSuccess({}, "phone"));
+  } catch (error) {
+    dispatch(sessionError(error.message));
+  }
+};
+
+export const loginUsingPhone = (phoneNumber) => async (dispatch) => {
+  // dispatch(sessionLoading());
+
+  try {
+    const formattedPhoneNumber = phone(phoneNumber, { country: "IND" });
+    // if (formattedPhoneNumber.isValid) {
+    //   const confirmation = await auth().signInWithPhoneNumber(formattedPhoneNumber.phoneNumber);
+    //   dispatch(sessionOTPSent(confirmation));
+    // } else {
+    //   dispatch(sessionError("Invalid Phone Number"));
     // }
 
-    dispatch(sessionSuccess(user));
+    const confirmation = await auth().signInWithPhoneNumber("+91" + phoneNumber);
+    dispatch(sessionOTPSent(confirmation));
   } catch (error) {
     dispatch(sessionError(error.message));
   }
@@ -45,7 +73,8 @@ export const loginUsingGoogle = () => async (dispatch) => {
 export const logout = () => async (dispatch) => {
   try {
     dispatch(sessionLoading());
-    // await auth().signOut();
+    await GoogleSignin.revokeAccess();
+    await GoogleSignin.signOut();
     dispatch(sessionLogout());
   } catch (error) {
     console.log(error.message);
@@ -62,9 +91,15 @@ const sessionLoading = () => ({
   type: types.SESSION_LOADING,
 });
 
-const sessionSuccess = (user) => ({
+const sessionSuccess = (user, auth_type) => ({
   type: types.SESSION_SUCCESS,
   user,
+  auth_type,
+});
+
+const sessionOTPSent = (confirmation) => ({
+  type: types.SESSION_OTP_SENT,
+  confirm_otp: confirmation,
 });
 
 const signupSuccess = (user) => ({

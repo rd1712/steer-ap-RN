@@ -6459,6 +6459,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"phone@npm:^3.1.11":
+  version: 3.1.11
+  resolution: "phone@npm:3.1.11"
+  checksum: b3c936a3f2b80ffe17fa18a14fb2661a91b04d5e7fb6072bf5ac151e9990efa062107ce1d791acba4f603ccba00a8d4278e2881c3b8fd5485018558c7b9f04dc
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.0.0":
   version: 1.0.0
   resolution: "picocolors@npm:1.0.0"
@@ -6729,6 +6736,15 @@ __metadata:
   peerDependencies:
     react-native: ">=0.48.4"
   checksum: 5eec2aedb886213dfed4c8428a443b565dce80ba9fcf5897171e4c8829d4dd64c5011ac004d93f29adfc83ad6f88c2838d1a5b45255dc4a49bd1c0a169245800
+  languageName: node
+  linkType: hard
+
+"react-native-otp-verify@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "react-native-otp-verify@npm:1.0.4"
+  peerDependencies:
+    react-native: ^0.63.2
+  checksum: 266afed6ed4a5d8f7e3ef8c774e1592b5cd6436c6ddd1d82f192d5a38a9fc7256693646fd2f3d6b57ca682c127721366d20104df6513fb682042d6b26f836e69
   languageName: node
   linkType: hard
 
@@ -7707,10 +7723,12 @@ __metadata:
     expo-font: ^10.0.4
     expo-splash-screen: ~0.14.1
     expo-status-bar: ~1.2.0
+    phone: ^3.1.11
     react: 17.0.1
     react-dom: 17.0.1
     react-native: 0.64.3
     react-native-keyboard-aware-scroll-view: ^0.9.5
+    react-native-otp-verify: ^1.0.4
     react-native-safe-area-context: ^3.3.2
     react-native-screens: ^3.10.2
     react-native-svg: ^12.1.1

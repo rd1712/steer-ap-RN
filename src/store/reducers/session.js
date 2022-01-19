@@ -5,6 +5,8 @@ const initialState = {
   loading: false,
   user: {},
   error: null,
+  type: null,
+  confirm_otp: null,
 };
 
 const sessionReducer = (state = initialState, action) => {
@@ -13,10 +15,14 @@ const sessionReducer = (state = initialState, action) => {
       return { ...initialState, user: action.user, restoring: true };
     case types.SESSION_LOADING:
       return { ...initialState, loading: true };
+    case types.SESSION_OTP_SENT:
+      return { ...initialState, confirm_otp: action.confirm_otp };
     case types.SESSION_SUCCESS:
       return {
         ...initialState,
         user: action.user,
+        type: action.type,
+        confirm_otp: null,
       };
     case types.SIGNUP_SUCCESS:
       return {
