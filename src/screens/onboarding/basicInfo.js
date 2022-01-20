@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { Button, StyleSheet, Text } from "react-native";
 import BackgroundCreateAccount from "../../components/BackgroundCreateAccount";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -7,6 +7,9 @@ import Picker from "../../components/Picker";
 import GreyContainer from "../../components/GreyContainer";
 import { stateData } from "../../data/StateData";
 import { genderData } from "../../data/GenderData";
+
+import * as actions from "../../store/actions";
+import { useDispatch } from "react-redux";
 
 const basicInfo = (props) => {
   const [date, setDate] = useState(new Date());
@@ -19,6 +22,8 @@ const basicInfo = (props) => {
   const [dateChecker, setDateChecker] = useState(false);
   const [genderChecker, setGenderChecker] = useState(false);
   const [stateChecker, setStateChecker] = useState(false);
+
+  const dispatch = useDispatch();
 
   const formatDate = (date) => {
     var d = date.getDate();
@@ -100,6 +105,12 @@ const basicInfo = (props) => {
           setStateChecker(true);
         }}
       />
+      <Button
+        onPress={() => {
+          dispatch(actions.logout());
+        }}
+        title="Logout"
+      ></Button>
     </BackgroundCreateAccount>
   );
 };

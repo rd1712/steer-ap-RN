@@ -12,9 +12,9 @@ const initialState = {
 const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.SESSION_RESTORING:
-      return { ...initialState, user: action.user, restoring: true };
+      return { ...state, user: action.user, restoring: true };
     case types.SESSION_LOADING:
-      return { ...initialState, loading: true };
+      return { ...state, loading: true };
     case types.SESSION_OTP_SENT:
       return { ...initialState, confirm_otp: action.confirm_otp };
     case types.SESSION_SUCCESS:

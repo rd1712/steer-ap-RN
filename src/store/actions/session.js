@@ -56,15 +56,15 @@ export const loginUsingPhone = (phoneNumber) => async (dispatch) => {
 
   try {
     const formattedPhoneNumber = phone(phoneNumber, { country: "IND" });
-    // if (formattedPhoneNumber.isValid) {
-    //   const confirmation = await auth().signInWithPhoneNumber(formattedPhoneNumber.phoneNumber);
-    //   dispatch(sessionOTPSent(confirmation));
-    // } else {
-    //   dispatch(sessionError("Invalid Phone Number"));
-    // }
+    if (formattedPhoneNumber.isValid) {
+      const confirmation = await auth().signInWithPhoneNumber(formattedPhoneNumber.phoneNumber);
+      dispatch(sessionOTPSent(confirmation));
+    } else {
+      dispatch(sessionError("Invalid Phone Number"));
+    }
 
-    const confirmation = await auth().signInWithPhoneNumber("+91" + phoneNumber);
-    dispatch(sessionOTPSent(confirmation));
+    // const confirmation = await auth().signInWithPhoneNumber("+91" + phoneNumber);
+    // dispatch(sessionOTPSent(confirmation));
   } catch (error) {
     dispatch(sessionError(error.message));
   }

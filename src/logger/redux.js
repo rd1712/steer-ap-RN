@@ -27,7 +27,12 @@ const topLevel = (obj, rightArrow) => {
       formatted += `${rightArrow} ${key} `;
     }
     if (obj.hasOwnProperty(key)) {
-      formatted += `${truncate(JSON.stringify(obj[key]), 500)}\n`;
+      formatted += `${truncate(
+        JSON.stringify(obj[key], (key, val) =>
+          val && val.constructor && val.call && val.apply ? "function() {}" : val
+        ),
+        500
+      )}\n`;
     }
   });
 

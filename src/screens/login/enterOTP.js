@@ -9,6 +9,8 @@ import RNOtpVerify from "react-native-otp-verify";
 
 import { useSelector, useDispatch } from "react-redux";
 
+import { OTP_TIMER_VALUE, OTP_LENGTH } from "../../constants";
+
 const enterOTP = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
@@ -19,7 +21,7 @@ const enterOTP = ({ route, navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const numberInputHandler = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ""));
-    if (!isNaN(inputText) && inputText.toString().length === 6) {
+    if (!isNaN(inputText) && inputText.toString().length === OTP_LENGTH) {
       setButtonColor("#004475");
       setButtonDisabled(false);
     } else {
@@ -27,6 +29,27 @@ const enterOTP = ({ route, navigation }) => {
       setButtonDisabled(true);
     }
   };
+
+  const [resendOTPTimer, setResendOTPTimer] = useState(OTP_TIMER_VALUE);
+
+  const startResendOTPTimer = (timerStartValue) => {
+    try {
+      if (timerStartValue) setResendOTPTimer(timerStartValue);
+      const resendOTPTimerInterval = setInterval(() => {
+        setResendOTPTimer((resendOTPTimer) => {
+          if (resendOTPTimer <= 0) {
+            clearInterval(resendOTPTimerInterval);
+            return resendOTPTimer;
+          } else {
+            return resendOTPTimer - 1;
+          }
+        });
+      }, 1000);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const requestOTPHandler = () => {
     dispatch(actions.verifyOTP(confirm_otp, enteredValue));
     // navigation.navigate("Onboarding");
@@ -37,6 +60,11 @@ const enterOTP = ({ route, navigation }) => {
 
   const otpHandler = (message) => {
     console.log(message);
+    if (message === "Timeout Error.") {
+      RNOtpVerify.removeListener();
+      return;
+    }
+
     const otp = /(\d{6})/g.exec(message)[1];
     setEnteredValue(otp);
     RNOtpVerify.removeListener();
@@ -46,6 +74,12 @@ const enterOTP = ({ route, navigation }) => {
   useEffect(async () => {
     await RNOtpVerify.getOtp();
     RNOtpVerify.addListener(otpHandler);
+
+    // navigation.addListener("beforeRemove", (e) => {
+    //   e.preventDefault();
+    // });
+
+    startResendOTPTimer();
 
     return () => RNOtpVerify.removeListener();
   }, []);
@@ -61,8 +95,17 @@ const enterOTP = ({ route, navigation }) => {
       />
       <View style={styles.optView}>
         <Text style={styles.otp}>Enter OTP</Text>
-        <TouchableOpacity>
-          <Text style={styles.resend}>Resend</Text>
+        <TouchableOpacity
+          disabled={resendOTPTimer > 0}
+          onPress={() => {
+            startResendOTPTimer(OTP_TIMER_VALUE);
+          }}
+        >
+          {resendOTPTimer > 0 ? (
+            <Text style={styles.resend_disabled}>Resend in {resendOTPTimer} sec</Text>
+          ) : (
+            <Text style={styles.resend}>Resend</Text>
+          )}
         </TouchableOpacity>
       </View>
       <TextInputContainer
@@ -70,7 +113,7 @@ const enterOTP = ({ route, navigation }) => {
         blurOnSubmit
         autoCorrect={false}
         keyboardType="number-pad"
-        maxLength={6}
+        maxLength={OTP_LENGTH}
         value={enteredValue}
         onChangeText={numberInputHandler}
         placeholder={"ex: 5038"}
@@ -129,6 +172,9 @@ const styles = StyleSheet.create({
   resend: {
     color: "#004475",
     textDecorationLine: "underline",
+  },
+  resend_disabled: {
+    color: "#313537",
   },
   buttonContainer: {
     marginTop: "3%",

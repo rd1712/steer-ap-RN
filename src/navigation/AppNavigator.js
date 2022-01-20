@@ -5,9 +5,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboarding from "./Onboarding";
 import Login from "./Login";
 
+import { useSelector } from "react-redux";
+
 const Stack = createNativeStackNavigator();
 
 export default AppNavigator = () => {
+  const user = useSelector((state) => state.session.user);
+  console.log();
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -15,8 +20,11 @@ export default AppNavigator = () => {
           headerShown: false,
         }}
       >
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Onboarding" component={Onboarding} />
+        {Object.keys(user).length === 0 ? (
+          <Stack.Screen name="Login" component={Login} />
+        ) : (
+          <Stack.Screen name="Onboarding" component={Onboarding} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
