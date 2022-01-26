@@ -6,6 +6,8 @@ import BlueButton from "../../components/BlueButton";
 import * as actions from "../../store/actions";
 
 import RNOtpVerify from "react-native-otp-verify";
+import Spinner from "react-native-spinkit";
+import auth from "@react-native-firebase/auth";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -14,7 +16,18 @@ import { OTP_TIMER_VALUE, OTP_LENGTH } from "../../constants";
 const enterOTP = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
-  const confirm_otp = useSelector((state) => state.session.confirm_otp);
+  const phoneLogin = useSelector((state) => state.session.phoneLogin);
+  const loading = useSelector((state) => state.session.loading);
+
+  function onAuthStateChanged({ user, additionalUserInfo }) {
+    console.log(user);
+    if (user) actions.login(user, additionalUserInfo, "phone");
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
 
   const [enteredValue, setEnteredValue] = useState("");
   const [buttonColor, setButtonColor] = useState("#CFCFCF");
@@ -45,14 +58,14 @@ const enterOTP = ({ route, navigation }) => {
           }
         });
       }, 1000);
+      return resendOTPTimerInterval;
     } catch (error) {
       console.log(error.message);
     }
   };
 
   const requestOTPHandler = () => {
-    dispatch(actions.verifyOTP(confirm_otp, enteredValue));
-    // navigation.navigate("Onboarding");
+    dispatch(actions.verifyOTP(phoneLogin, enteredValue));
   };
   const previousHandler = () => {
     navigation.navigate("loginOptions");
@@ -67,6 +80,7 @@ const enterOTP = ({ route, navigation }) => {
 
     const otp = /(\d{6})/g.exec(message)[1];
     setEnteredValue(otp);
+    setButtonDisabled(false);
     RNOtpVerify.removeListener();
     Keyboard.dismiss();
   };
@@ -79,9 +93,12 @@ const enterOTP = ({ route, navigation }) => {
     //   e.preventDefault();
     // });
 
-    startResendOTPTimer();
+    const resendOTPTimerInterval = startResendOTPTimer();
 
-    return () => RNOtpVerify.removeListener();
+    return () => {
+      RNOtpVerify.removeListener();
+      clearInterval(resendOTPTimerInterval);
+    };
   }, []);
 
   return (
@@ -97,7 +114,10 @@ const enterOTP = ({ route, navigation }) => {
         <Text style={styles.otp}>Enter OTP</Text>
         <TouchableOpacity
           disabled={resendOTPTimer > 0}
-          onPress={() => {
+          onPress={async () => {
+            dispatch(actions.loginUsingPhone(phoneLogin.phoneNumber));
+            await RNOtpVerify.getOtp();
+            RNOtpVerify.addListener(otpHandler);
             startResendOTPTimer(OTP_TIMER_VALUE);
           }}
         >
@@ -127,6 +147,14 @@ const enterOTP = ({ route, navigation }) => {
         />
         <BlueButton color={buttonColor} disabled={buttonDisabled} title={"Continue"} onPress={requestOTPHandler} />
       </View>
+
+      <Spinner
+        style={{ position: "absolute", bottom: 20 }}
+        isVisible={loading}
+        size={40}
+        type="ThreeBounce"
+        color="#6C63FF"
+      />
     </BackgroundWithImage>
   );
 };

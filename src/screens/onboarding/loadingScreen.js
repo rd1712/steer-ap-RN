@@ -1,16 +1,31 @@
-import React from "react";
+// Modules
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View, StatusBar, SafeAreaView } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useSelector, useDispatch } from "react-redux";
+
+// Components
 import AccountMadeImage from "../../icon-buttons/AccountMadeImage";
 
-const loadingScreen = (props) => {
-  const marginTop = props.marginTop;
-  const marginBottom = props.marginBottom;
+// Redux
+import * as actions from "../../store/actions";
+
+const loadingScreen = ({ navigation }) => {
+  // Hooks
+  const onboardingObject = useSelector((state) => state.onboarding);
+  const sessionObject = useSelector((state) => state.session);
+
+  const dispatch = useDispatch();
+  useEffect(async () => {
+    await new Promise((r) => setTimeout(r, 2000));
+    dispatch(actions.updateDB(sessionObject, onboardingObject));
+  }, []);
+
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.wrapper}>
-      <SafeAreaView style={{ ...styles.blueBackground, ...props.style }}>
+      <SafeAreaView style={{ ...styles.blueBackground }}>
         <StatusBar barStyle="dark-content" backgroundColor="#EAEEF2" />
-        <View style={{ ...styles.titleBox, marginTop: marginTop }}></View>
+        <View style={{ ...styles.titleBox }}></View>
         <View style={styles.whiteBackground}>
           <Text style={styles.heading}>Creating your account</Text>
           <Text style={styles.subheading}>This will just take a second.</Text>

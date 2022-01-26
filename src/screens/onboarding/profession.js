@@ -1,29 +1,50 @@
+// Modules
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+
+// Components
 import BackgroundCreateAccount from "../../components/BackgroundCreateAccount";
 import ProfessionContainer from "../../components/ProfessionContainer";
 import School from "../../icon-buttons/School";
 import College from "../../icon-buttons/College";
 import Work from "../../icon-buttons/Work";
 
-const schoolOrWork = ({ navigation }) => {
+// Redux
+import * as actions from "../../store/actions";
+
+const profession = ({ navigation }) => {
+  // Hooks
+  const dispatch = useDispatch();
+  const profileType = useSelector((state) => state.onboarding.profileType);
+
   const [schoolTicker, setSchoolTicker] = useState(false);
   const [collegeTicker, setCollegeTicker] = useState(false);
   const [workTicker, setWorkTicker] = useState(false);
   const [checkedValue, setCheckedValue] = useState();
+
   return (
     <BackgroundCreateAccount
       progressNumber={5}
       whiteBoxHeading={"Let us get to know you!"}
-      previousNavigation={() => navigation.navigate("currentPreparation")}
+      previousNavigation={() => {
+        navigation.goBack();
+      }}
       nextNavigation={() => {
+        let profession;
+        if (schoolTicker) profession = "school";
+        else if (collegeTicker) profession = "college";
+        else if (workTicker) profession = "work";
+
+        dispatch(actions.addProfession(profession));
         if (checkedValue === 1 || checkedValue === 2)
           navigation.navigate("institutionName", { paramKey: checkedValue });
         else {
-          navigation.navigate("institutionName", { paramKey: checkedValue });
+          navigation.navigate("loadingScreen");
         }
       }}
       nextCondition={schoolTicker || collegeTicker || workTicker}
+      prevCondition={true}
     >
       <Text style={styles.subheading}>Select the options that describes you best. You’re in...</Text>
       <ProfessionContainer
@@ -56,12 +77,12 @@ const schoolOrWork = ({ navigation }) => {
   );
 };
 
-export default schoolOrWork;
+export default profession;
 
 const styles = StyleSheet.create({
   subheading: {
     width: "85%",
-    marginTop: "12%",
+    marginTop: "5%",
     fontFamily: "Nunito",
     fontStyle: "normal",
     fontWeight: "normal",

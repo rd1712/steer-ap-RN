@@ -24,15 +24,10 @@ const topLevel = (obj, rightArrow) => {
   let formatted = "";
   Object.keys(obj).forEach((key) => {
     if (key.length > 0) {
-      formatted += `${rightArrow} ${key} `;
+      formatted += `${rightArrow} ${key}\n`;
     }
     if (obj.hasOwnProperty(key)) {
-      formatted += `${truncate(
-        JSON.stringify(obj[key], (key, val) =>
-          val && val.constructor && val.call && val.apply ? "function() {}" : val
-        ),
-        500
-      )}\n`;
+      formatted += `${truncate(JSON.stringify(obj[key]), 5000)}\n`;
     }
   });
 
@@ -43,6 +38,7 @@ const renderToConsole = (obj, rightArrow) => {
   try {
     return topLevel(obj, rightArrow);
   } catch (e) {
+    console.log(e.message);
     return obj;
   }
 };
@@ -52,13 +48,10 @@ export default function createCLILogger(options) {
     downArrow = "▼",
     rightArrow = "▶",
     messageColor = "red",
-    prevColor = "grey",
-    actionColor = "blue",
     nextColor = "yellow",
     predicate = null,
     log = console.log,
     stateTransformer = (x) => x,
-    actionTransformer = (x) => x,
   } = options;
 
   return (store) => (next) => (action) => {
@@ -72,8 +65,6 @@ export default function createCLILogger(options) {
       return next(action);
     }
 
-    const prevState = renderToConsole(stateTransformer(getState()), rightArrow);
-    const actionDisplay = renderToConsole(actionTransformer(action), rightArrow);
     const returnValue = next(action);
     const nextState = renderToConsole(stateTransformer(getState()), rightArrow);
     const time = new Date();
@@ -84,10 +75,7 @@ export default function createCLILogger(options) {
     const message = `${downArrow} action ${action.type} @ ${h}:${m}:${s}`;
 
     const output =
-      `\n${colors[messageColor](truncate(message, 100))}\n` +
-      // `  ${colors[prevColor](`prev state\n${prevState}`)}` +
-      // `  ${colors[actionColor](`action\n${actionDisplay}`)}` +
-      `${colors[nextColor](`state\n${nextState}`)}`;
+      `\n${colors[messageColor](truncate(message, 100))}\n` + `${colors[nextColor](`state\n${nextState}`)}`;
 
     log(output);
     return returnValue;

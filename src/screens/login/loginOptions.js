@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import Spinner from "react-native-spinkit";
 
 import * as actions from "../../store/actions";
 
@@ -12,6 +13,7 @@ import Google from "../../icon-buttons/Google";
 
 const loginOptions = (props) => {
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.session.loading);
 
   const [enteredValue, setEnteredValue] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -65,6 +67,13 @@ const loginOptions = (props) => {
           <Text style={{ ...styles.footerText, color: "#0bccea" }}>Log In</Text>
         </TouchableOpacity>
       </View>
+      <Spinner
+        style={{ position: "absolute", bottom: 20 }}
+        isVisible={loading}
+        size={40}
+        type="ThreeBounce"
+        color="#6C63FF"
+      />
     </BackgroundWithoutImage>
   );
 };

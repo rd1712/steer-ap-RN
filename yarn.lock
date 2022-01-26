@@ -1801,6 +1801,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-async-storage/async-storage@npm:^1.15.17":
+  version: 1.15.17
+  resolution: "@react-native-async-storage/async-storage@npm:1.15.17"
+  dependencies:
+    merge-options: ^3.0.4
+  peerDependencies:
+    react-native: ^0.0.0-0 || 0.60 - 0.67 || 1000.0.0
+  checksum: 4c3dd30f6969bdcb2a5cafd82a8751e69f1c2c48f226c95f389b61246f19645229c178da35147310eee8b17f0f55d64ce3820101fc6f494cd6720cd69b9ad87f
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-debugger-ui@npm:^5.0.1":
   version: 5.0.1
   resolution: "@react-native-community/cli-debugger-ui@npm:5.0.1"
@@ -1974,6 +1985,15 @@ __metadata:
   peerDependencies:
     "@react-native-firebase/app": 14.2.2
   checksum: d8ad0fdcdef02f6c7e0a729819b1cf1a8a2b63f788e379b23453661cbd7b0b5d5524a1d2ce13b04fca13bb512c37367e864d2ea0c877c72f282605a37f002548
+  languageName: node
+  linkType: hard
+
+"@react-native-firebase/firestore@npm:^14.2.3":
+  version: 14.2.3
+  resolution: "@react-native-firebase/firestore@npm:14.2.3"
+  peerDependencies:
+    "@react-native-firebase/app": 14.2.3
+  checksum: a1767faccabd0a43aa3a1fb6f80ef33dcd3dddb5b9ee74dea3ac007f5380c95fe693556e2beac6cbb507208a25eb95d2c627bf5fe5379daec72ab4626320f862
   languageName: node
   linkType: hard
 
@@ -4774,6 +4794,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-plain-obj@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "is-plain-obj@npm:2.1.0"
+  checksum: cec9100678b0a9fe0248a81743041ed990c2d4c99f893d935545cfbc42876cbe86d207f3b895700c690ad2fa520e568c44afc1605044b535a7820c1d40e38daa
+  languageName: node
+  linkType: hard
+
 "is-plain-object@npm:^2.0.3, is-plain-object@npm:^2.0.4":
   version: 2.0.4
   resolution: "is-plain-object@npm:2.0.4"
@@ -5411,6 +5438,15 @@ __metadata:
   version: 2.0.14
   resolution: "mdn-data@npm:2.0.14"
   checksum: 9d0128ed425a89f4cba8f787dca27ad9408b5cb1b220af2d938e2a0629d17d879a34d2cb19318bdb26c3f14c77dd5dfbae67211f5caaf07b61b1f2c5c8c7dc16
+  languageName: node
+  linkType: hard
+
+"merge-options@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "merge-options@npm:3.0.4"
+  dependencies:
+    is-plain-obj: ^2.1.0
+  checksum: d86ddb3dd6e85d558dbf25dc944f3527b6bacb944db3fdda6e84a3f59c4e4b85231095f58b835758b9a57708342dee0f8de0dffa352974a48221487fe9f4584f
   languageName: node
   linkType: hard
 
@@ -6607,7 +6643,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
+"prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -6771,6 +6807,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-spinkit@npm:latest":
+  version: 1.5.1
+  resolution: "react-native-spinkit@npm:1.5.1"
+  dependencies:
+    prop-types: ^15.5.8
+  checksum: 20f3de49c77e61033db9e0a1fb710f0cb8ac3b4126de98c82627b73992cfd922252822eb30c5b70669dc31fc0d5b0a89de2236c6ad2a115e3b28407cf9696ad8
+  languageName: node
+  linkType: hard
+
 "react-native-svg@npm:^12.1.1":
   version: 12.2.0
   resolution: "react-native-svg@npm:12.2.0"
@@ -6928,6 +6973,15 @@ __metadata:
   dependencies:
     resolve: ^1.1.6
   checksum: fe76bf9c21875ac16e235defedd7cbd34f333c02a92546142b7911a0f7c7059d2e16f441fe6fb9ae203f459c05a31b2bcf26202896d89e390eda7514d5d2702b
+  languageName: node
+  linkType: hard
+
+"redux-persist@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "redux-persist@npm:6.0.0"
+  peerDependencies:
+    redux: ">4.0.0"
+  checksum: edaf10dbf17351ce8058d0802357adae8665b3a1ff39371834e37838ddbe1a79cccbc717b8ba54acb5307651ccf51d0f7dc1cbc8dbae0726ff952d11ef61c6b8
   languageName: node
   linkType: hard
 
@@ -7713,9 +7767,11 @@ __metadata:
   resolution: "steer-app@workspace:."
   dependencies:
     "@babel/core": ^7.12.9
+    "@react-native-async-storage/async-storage": ^1.15.17
     "@react-native-community/datetimepicker": ^5.1.0
     "@react-native-firebase/app": ^14.2.2
     "@react-native-firebase/auth": ^14.2.2
+    "@react-native-firebase/firestore": ^14.2.3
     "@react-native-google-signin/google-signin": ^7.0.4
     "@react-navigation/native": ^6.0.6
     "@react-navigation/native-stack": ^6.2.5
@@ -7731,10 +7787,12 @@ __metadata:
     react-native-otp-verify: ^1.0.4
     react-native-safe-area-context: ^3.3.2
     react-native-screens: ^3.10.2
+    react-native-spinkit: latest
     react-native-svg: ^12.1.1
     react-native-web: 0.17.1
     react-redux: ^7.2.6
     redux: ^4.1.2
+    redux-persist: ^6.0.0
     redux-thunk: ^2.4.1
   languageName: unknown
   linkType: soft

@@ -1,22 +1,51 @@
-import React, { useState } from "react";
+// Modules
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+
+// Components
 import BackgroundCreateAccount from "../../components/BackgroundCreateAccount";
 import GreyContainer from "../../components/GreyContainer";
 import Picker from "../../components/Picker";
-import { examData } from "../../data/ExamData";
 
-const examsSelection = ({ navigation }) => {
+// Redux
+import * as actions from "../../store/actions";
+
+const examsSelection = ({ navigation, route }) => {
+  // Hooks
+  const dispatch = useDispatch();
+  const examList = useSelector((state) => state.metadata.examList);
+
+  const { forProfileType, profileType } = route.params;
+
+  useEffect(async () => {
+    console.log(forProfileType);
+    dispatch(actions.fetchExamList());
+  }, []);
+
   const [examText, setExamText] = useState("");
   const [examPickerVisible, setExamPickerVisible] = useState(false);
+
   return (
     <BackgroundCreateAccount
       progressNumber={3}
       whiteBoxHeading={"Let us get to know you!"}
-      previousNavigation={() => navigation.navigate("profileType")}
-      nextNavigation={() => navigation.navigate("currentPreparation")}
+      prevCondition={true}
       nextCondition={examText !== ""}
+      // PREVIOUS
+      previousNavigation={() => navigation.goBack()}
+      // NEXT
+      nextNavigation={() => {
+        if (forProfileType === "aspirant" && profileType === "both")
+          navigation.push("examsSelection", { forProfileType: "mentor", profileType });
+        else navigation.navigate("profession");
+      }}
     >
-      <Text style={styles.subheading}>Choose the exam you are preparing for</Text>
+      <Text style={styles.subheading}>
+        {forProfileType === "aspirant"
+          ? "Choose the exam you are preparing for"
+          : "Choose the exam you are mentoriing for"}
+      </Text>
       <Text style={styles.examText}>Exam</Text>
       <GreyContainer
         Placeholder="You identify as"
@@ -26,10 +55,17 @@ const examsSelection = ({ navigation }) => {
         }}
       />
       <Picker
-        data={examData}
+        data={examList}
         label={"name"}
-        value={"value"}
-        onValueChange={(value) => setExamText(value)}
+        value={"name"}
+        onValueChange={(value) => {
+          console.log(value, forProfileType);
+          setExamText(value);
+          if (forProfileType === "aspirant")
+            navigation.push("currentPreparation", { exam: value, profileType, forProfileType });
+          else if (forProfileType === "mentor")
+            navigation.navigate("uploadDocument", { exam: value, profileType, forProfileType });
+        }}
         visible={examPickerVisible}
         setVisibility={setExamPickerVisible}
         checker={() => {
@@ -45,7 +81,7 @@ export default examsSelection;
 const styles = StyleSheet.create({
   subheading: {
     width: "85%",
-    marginTop: "12%",
+    marginTop: "5%",
     fontFamily: "Nunito",
     fontStyle: "normal",
     fontWeight: "normal",
@@ -56,7 +92,8 @@ const styles = StyleSheet.create({
   examText: {
     textAlign: "left",
     marginTop: "10%",
-    marginLeft: "-63%",
+    alignSelf: "flex-start",
+    marginLeft: "10%",
     marginBottom: "5%",
     fontFamily: "Nunito",
     fontStyle: "normal",

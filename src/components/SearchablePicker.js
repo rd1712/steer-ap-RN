@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Modal, Text, TouchableHighlight, View, StyleSheet, FlatList, Button } from "react-native";
+import { Modal, Text, TouchableHighlight, View, StyleSheet, FlatList, Button, TextInput } from "react-native";
 
-const Picker = (props) => {
+import Search from "../icon-buttons/Search";
+
+const SearchablePicker = (props) => {
   return (
     <View
       style={{
@@ -19,16 +21,20 @@ const Picker = (props) => {
         }}
         style={styles.modal}
       >
-        {/* <View style={{ borderRadius: 16, }}> */}
         <TouchableHighlight
           style={styles.container}
           onPress={() => props.setVisibility(false)}
           underlayColor={"#333333cc"}
         >
           <View style={styles.modal}>
+            <View>
+              <Search />
+              <TextInput style={styles.textInput}></TextInput>
+            </View>
+
             <FlatList
               // style={{ backgroundColor: "#FDFDFD" }}
-              contentContainerStyle={{ borderRadius: 16, overflow: "hidden" }}
+              // contentContainerStyle={{ borderRadius: 16, overflow: "hidden" }}
               initialNumToRender={15}
               data={props.data}
               keyExtractor={(_, index) => index.toString()}
@@ -59,7 +65,7 @@ const Picker = (props) => {
   );
 };
 
-// Picker.propTypes = {
+// SearchablePicker.propTypes = {
 //   data: PropTypes.array.isRequired,
 //   value: PropTypes.string.isRequired,
 //   label: PropTypes.string.isRequired,
@@ -68,7 +74,13 @@ const Picker = (props) => {
 // };
 
 const styles = StyleSheet.create({
-  modal: {},
+  modal: {
+    flex: 1,
+    borderRadius: 16,
+    overflow: "hidden",
+    borderColor: "#CCC",
+    backgroundColor: "#FDFDFD",
+  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -84,9 +96,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#FDFDFD",
     // borderRadius: 16,
   },
+  textInput: {
+    margin: 16,
+    fontSize: 18,
+    color: "#222",
+    backgroundColor: "#F2F2F4",
+  },
   listContainer: {
     paddingLeft: "3%",
   },
 });
 
-export default Picker;
+export default SearchablePicker;

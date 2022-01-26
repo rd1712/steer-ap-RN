@@ -1,19 +1,41 @@
+// Modules
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+
+// Components
 import BackgroundCreateAccount from "../../components/BackgroundCreateAccount";
 import AssessContainer from "../../components/AssessContainer";
 import AssessBarGraph from "../../icon-buttons/AssessBarGraph";
 
-const currentPreparation = ({ navigation }) => {
+// Redux
+import * as actions from "../../store/actions";
+
+const currentPreparation = ({ navigation, route }) => {
+  // Hooks
+  const dispatch = useDispatch();
+
   const [beginnerChecker, setBeginnerChecker] = useState(false);
   const [intermediateChecker, setIntermediateChecker] = useState(false);
   const [advancedChecker, setAdvancedChecker] = useState(false);
+
+  const { exam, forProfileType, profileType } = route.params;
+
   return (
     <BackgroundCreateAccount
       progressNumber={4}
       whiteBoxHeading={"Please self assess yourself"}
-      previousNavigation={() => navigation.navigate("examsSelection")}
-      nextNavigation={() => navigation.navigate("schoolOrWork")}
+      previousNavigation={() => navigation.goBack()}
+      nextNavigation={() => {
+        let skillLevel = 0;
+        if (beginnerChecker) skillLevel = 0;
+        else if (intermediateChecker) skillLevel = 1;
+        else if (advancedChecker) skillLevel = 2;
+
+        dispatch(actions.upsertExam(forProfileType, { index: 0, examId: exam, skillLevel }));
+        navigation.navigate("examsSelection", { forProfileType, profileType });
+      }}
+      prevCondition={true}
       nextCondition={beginnerChecker || intermediateChecker || advancedChecker}
     >
       <Text style={styles.subheading}>Select what fits you the best right now</Text>
@@ -56,7 +78,7 @@ export default currentPreparation;
 const styles = StyleSheet.create({
   subheading: {
     width: "85%",
-    marginTop: "12%",
+    marginTop: "5%",
     fontFamily: "Nunito",
     fontStyle: "normal",
     fontWeight: "normal",
