@@ -37,14 +37,14 @@ export const loginUsingGoogle = () => async (dispatch) => {
 export const loginUsingPhone = (phoneNumber) => async (dispatch) => {
   try {
     const formattedPhoneNumber = phone(phoneNumber, { country: "IND" });
-    const confirmOTP = await auth().signInWithPhoneNumber("+91" + phoneNumber);
-    // if (formattedPhoneNumber.isValid) {
-    // const confirmOTP = await auth().signInWithPhoneNumber(formattedPhoneNumber.phoneNumber);
+    // const confirmOTP = await auth().signInWithPhoneNumber("+91" + phoneNumber);
+    if (formattedPhoneNumber.isValid) {
+      const confirmOTP = await auth().signInWithPhoneNumber(formattedPhoneNumber.phoneNumber);
 
-    dispatch(sessionOTPSent(phoneNumber, confirmOTP));
-    // } else {
-    //   dispatch(sessionError("Invalid Phone Number"));
-    // }
+      dispatch(sessionOTPSent(phoneNumber, confirmOTP));
+    } else {
+      dispatch(sessionError("Invalid Phone Number"));
+    }
   } catch (error) {
     dispatch(sessionError(error.message));
   }

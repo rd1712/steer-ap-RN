@@ -132,12 +132,12 @@ const basicInfo = (props) => {
         checker={() => {}}
       />
 
-      <Button
+      {/* <Button
         title="Logout"
         onPress={() => {
           dispatch(actions.logout());
         }}
-      ></Button>
+      ></Button> */}
     </BackgroundCreateAccount>
     // </KeyboardAwareScrollView>
   );
